@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About — OncoScan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose: #c8455a;
+    --rose-light: #f7e8eb;
+    --rose-mid: #e8a0ad;
+    --dark: #1a1015;
+    --dark2: #2e1e24;
+    --muted: #8a6b72;
+    --cream: #fdf6f7;
+    --white: #ffffff;
+    --green: #2d7a5f;
+    --green-light: #e6f4ef;
+    --amber: #b86a1a;
+    --amber-light: #fdf0e3;
+    --red: #b83232;
+    --red-light: #fce8e8;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--dark);
+    padding: 1.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--rose);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon svg { width: 18px; height: 18px; fill: white; }
+  .logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--white);
+  }
+  .logo-text span { color: var(--rose-mid); font-style: italic; }
+
+  nav { display: flex; align-items: center; gap: 2rem; }
+  nav a {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--white); }
+  nav a.active { color: var(--rose-mid); }
+
+  .nav-cta {
+    padding: 0.5rem 1.2rem;
+    background: var(--rose);
+    color: white !important;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: #b03349 !important; color: white !important; }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--dark2);
+    padding: 5rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,69,90,0.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 700px; position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 em { color: var(--rose-mid); font-style: italic; }
+  .hero p {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .section-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--dark);
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+  }
+  .section-title em { color: var(--rose); font-style: italic; }
+  .section-sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 3rem;
+  }
+
+  /* ── Two-column ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  /* ── Project summary ── */
+  .summary-card {
+    background: var(--white);
+    border: 1px solid #eddde0;
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .summary-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
+  }
+
+  .summary-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--rose-light);
+    color: var(--rose);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Pipeline ── */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .pipe-step {
+    display: flex;
+    gap: 1.2rem;
+    position: relative;
+  }
+
+  .pipe-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pipe-dot {
+    width: 36px; height: 36px;
+    background: var(--rose);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .pipe-dot svg { width: 16px; height: 16px; fill: white; }
+
+  .pipe-line {
+    width: 2px;
+    flex: 1;
+    background: linear-gradient(to bottom, var(--rose-mid), transparent);
+    margin-top: 4px;
+    min-height: 40px;
+  }
+
+  .pipe-step:last-child .pipe-line { display: none; }
+
+  .pipe-content {
+    padding-bottom: 2rem;
+    padding-top: 0.4rem;
+  }
+
+  .pipe-content h4 {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .pipe-content p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .pipe-content code {
+    font-size: 0.8rem;
+    background: var(--rose-light);
+    color: var(--rose);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ── Dataset ── */
+  .dataset-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+
+  .dataset-card {
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid #eddde0;
+    background: var(--white);
+  }
+
+  .dataset-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+  }
+  .icon-benign { background: var(--green-light); }
+  .icon-malignant { background: var(--red-light); }
+  .icon-normal { background: var(--amber-light); }
+
+  .dataset-icon svg { width: 22px; height: 22px; }
+  .icon-benign svg { fill: var(--green); }
+  .icon-malignant svg { fill: var(--red); }
+  .icon-normal svg { fill: var(--amber); }
+
+  .dataset-class {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+    text-transform: capitalize;
+  }
+
+  .dataset-count {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .dataset-count strong {
+    display: block;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    color: var(--rose);
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+  }
+
+  /* ── Architecture table ── */
+  .arch-section { background: #f5ecee; }
+
+  .arch-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #eddde0;
+  }
+
+  .arch-table th {
+    background: var(--dark2);
+    color: var(--rose-mid);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 1rem 1.2rem;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .arch-table td {
+    padding: 1rem 1.2rem;
+    font-size: 0.875rem;
+    color: var(--dark);
+    border-bottom: 1px solid #f0e4e7;
+    vertical-align: middle;
+  }
+
+  .arch-table tr:last-child td { border-bottom: none; }
+  .arch-table tr:hover td { background: var(--rose-light); }
+
+  .arch-table td:first-child { font-weight: 500; }
+
+  .badge-best {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--green-light);
+    color: var(--green);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-left: 6px;
+  }
+
+  /* ── Tech stack ── */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+  }
+
+  .tech-card {
+    background: var(--white);
+    border: 1px solid #eddde0;
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .tech-card:hover { transform: translateY(-3px); }
+
+  .tech-emoji { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+
+  .tech-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .tech-role {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── Limitations ── */
+  .limit-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .limit-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    background: var(--white);
+    border: 1px solid #eddde0;
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .limit-list li::before {
+    content: '⚠';
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--amber);
+  }
+
+  /* ── CTA ── */
+  .cta-banner {
+    background: var(--dark2);
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 3rem;
+    text-align: center;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(200,69,90,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .cta-banner h2 em { color: var(--rose-mid); font-style: italic; }
+  .cta-banner p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .btn-primary {
+    padding: 0.85rem 1.8rem;
+    background: var(--rose);
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-block;
+    position: relative;
+  }
+  .btn-primary:hover { background: #b03349; transform: translateY(-1px); }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--dark);
+    padding: 2.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-copy { font-size: 0.8rem; color: var(--muted); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--rose-mid); }
+
+  .disclaimer {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #eddde0;
+    line-height: 1.6;
+    background: var(--cream);
+  }
+
+  @media (max-width: 900px) {
+    header { padding: 1rem 1.5rem; }
+    nav a:not(.nav-cta) { display: none; }
+    .hero { padding: 3.5rem 1.5rem; }
+    .hero h1 { font-size: 2.2rem; }
+    .two-col { grid-template-columns: 1fr; }
+    .dataset-grid { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <a href="/" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
+    </div>
+    <span class="logo-text">Onco<span>Scan</span></span>
+  </a>
+  <nav>
+  <a href="/">Home</a>
+  <a href="/about" class="active">About</a>
+  <a href="/detect">Detect</a>
+  <a href="/detect" class="nav-cta">Try Now →</a>
+</nav>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">About the Project</p>
+    <h1>The Science Behind <em>OncoScan</em></h1>
+    <p>A deep learning system trained to classify breast ultrasound images — comparing MLP, VGG16, and ResNet50 architectures to find the most accurate model for early cancer detection.</p>
+  </div>
+</div>
+
+<!-- Project overview -->
+<div class="container">
+  <p class="section-eyebrow">Project Overview</p>
+  <h2 class="section-title">What is <em>OncoScan?</em></h2>
+  <p class="section-sub">A research project comparing three deep learning models on breast ultrasound image classification — built with TensorFlow/Keras and deployed as a Flask web app.</p>
+
+  <div class="two-col">
+    <div class="summary-card">
+      <h3>Project Summary</h3>
+      <p>OncoScan is a comparative deep learning study that trains three models — a custom MLP, VGG16 (transfer learning), and ResNet50 (transfer learning) — on breast ultrasound images to classify tissue as <strong>benign</strong>, <strong>malignant</strong>, or <strong>normal</strong>.</p>
+      <p>The best-performing model (VGG16) is then deployed in a Flask web application, allowing users to upload an ultrasound image and receive an instant AI prediction with class probabilities.</p>
+      <div class="tag-list">
+        <span class="tag">TensorFlow</span>
+        <span class="tag">Keras</span>
+        <span class="tag">VGG16</span>
+        <span class="tag">ResNet50</span>
+        <span class="tag">Flask</span>
+        <span class="tag">OpenCV</span>
+        <span class="tag">Transfer Learning</span>
+        <span class="tag">Google Colab</span>
+      </div>
+    </div>
+
+    <!-- Pipeline -->
+    <div>
+      <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; color:var(--dark); margin-bottom:1.5rem;">Data Pipeline</h3>
+      <div class="pipeline">
+        <div class="pipe-step">
+          <div class="pipe-left">
+            <div class="pipe-dot"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.35C18 2.53 15.86.4 13.23.4c-1.3 0-2.48.52-3.35 1.36L9 2.66 8.12 1.76C7.25.92 6.07.4 4.77.4 2.14.4 0 2.53 0 4.65c0 .47.11.91.18 1.35H0v2h20V6z"/><path d="M3 8v11a1 1 0 0 0 1 1h6V8H3zM14 8v12h6a1 1 0 0 0 1-1V8h-7z"/></svg></div>
+            <div class="pipe-line"></div>
+          </div>
+          <div class="pipe-content">
+            <h4>Load Dataset</h4>
+            <p>1000 images per class from <code>breast_dataset1000</code> — benign, malignant, normal — read as grayscale using OpenCV.</p>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-left">
+            <div class="pipe-dot"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div>
+            <div class="pipe-line"></div>
+          </div>
+          <div class="pipe-content">
+            <h4>Preprocess</h4>
+            <p>Resize to <code>300×300px</code>, normalise pixel values to <code>[0, 1]</code>, shuffle and split — 80% train / 20% test.</p>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-left">
+            <div class="pipe-dot"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2z"/></svg></div>
+            <div class="pipe-line"></div>
+          </div>
+          <div class="pipe-content">
+            <h4>Train 3 Models</h4>
+            <p>MLP, VGG16, and ResNet50 each trained for 10 epochs. VGG16/ResNet50 use frozen ImageNet weights with a custom classification head.</p>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-left">
+            <div class="pipe-dot"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="pipe-line"></div>
+          </div>
+          <div class="pipe-content">
+            <h4>Evaluate & Deploy</h4>
+            <p>Confusion matrix, classification report, and accuracy curves compared. Best model weights saved and deployed via Flask.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dataset -->
+<div style="background: #f5ecee; padding: 5rem 0;">
+  <div class="container" style="padding-top:0; padding-bottom:0;">
+    <p class="section-eyebrow">Dataset</p>
+    <h2 class="section-title">Training <em>Data</em></h2>
+    <p class="section-sub">Breast ultrasound images across three balanced classes — 1000 images each, totalling 3000 images for training and evaluation.</p>
+
+    <div class="dataset-grid">
+      <div class="dataset-card">
+        <div class="dataset-icon icon-benign">
+          <svg viewBox="0 0 24 24"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
+        </div>
+        <p class="dataset-class">Benign</p>
+        <div class="dataset-count">
+          <strong>1,000</strong>
+          images · Non-cancerous tumors
+        </div>
+      </div>
+      <div class="dataset-card">
+        <div class="dataset-icon icon-malignant">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        </div>
+        <p class="dataset-class">Malignant</p>
+        <div class="dataset-count">
+          <strong>1,000</strong>
+          images · Cancerous tumors
+        </div>
+      </div>
+      <div class="dataset-card">
+        <div class="dataset-icon icon-normal">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+        <p class="dataset-class">Normal</p>
+        <div class="dataset-count">
+          <strong>1,000</strong>
+          images · No tumor detected
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Architecture comparison -->
+<div class="container">
+  <p class="section-eyebrow">Model Comparison</p>
+  <h2 class="section-title">Architecture <em>Details</em></h2>
+  <p class="section-sub">All three models share the same input (300×300 grayscale) and output (3-class softmax). VGG16 uses an internal Conv2D layer to convert grayscale to 3-channel before the pretrained base.</p>
+
+  <table class="arch-table">
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Architecture</th>
+        <th>Input</th>
+        <th>Pretrained</th>
+        <th>Parameters</th>
+        <th>Typical Accuracy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>MLP</td>
+        <td>6 Dense layers (256→8→3)</td>
+        <td>300×300 flattened</td>
+        <td>No</td>
+        <td>~23M</td>
+        <td>~70%</td>
+      </tr>
+      <tr>
+        <td>VGG16 <span class="badge-best">Best</span></td>
+        <td>Conv2D → VGG16 base → Dense(256) → Dropout</td>
+        <td>300×300×1</td>
+        <td>ImageNet</td>
+        <td>~138M (frozen)</td>
+        <td>~90%</td>
+      </tr>
+      <tr>
+        <td>ResNet50</td>
+        <td>Conv2D → ResNet50 base → Dense(256) → Dropout</td>
+        <td>300×300×1</td>
+        <td>ImageNet</td>
+        <td>~25M (frozen)</td>
+        <td>~85%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Tech stack -->
+<div style="background: #f5ecee; padding: 5rem 0;">
+  <div class="container" style="padding-top:0; padding-bottom:0;">
+    <p class="section-eyebrow">Tech Stack</p>
+    <h2 class="section-title">Built <em>With</em></h2>
+    <p class="section-sub">A standard Python ML stack for training, and Flask for lightweight web deployment.</p>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <span class="tech-emoji">🧠</span>
+        <p class="tech-name">TensorFlow / Keras</p>
+        <p class="tech-role">Model building, training, and saving</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-emoji">🖼️</span>
+        <p class="tech-name">OpenCV</p>
+        <p class="tech-role">Image loading, resizing, and grayscale processing</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-emoji">🌐</span>
+        <p class="tech-name">Flask</p>
+        <p class="tech-role">REST API backend and HTML template serving</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-emoji">🔢</span>
+        <p class="tech-name">NumPy / scikit-learn</p>
+        <p class="tech-role">Array operations, train/test split, metrics</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-emoji">📊</span>
+        <p class="tech-name">Matplotlib / Seaborn</p>
+        <p class="tech-role">Training curves and confusion matrix plots</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-emoji">☁️</span>
+        <p class="tech-name">Google Colab</p>
+        <p class="tech-role">GPU-accelerated training environment</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-emoji">💾</span>
+        <p class="tech-name">Google Drive</p>
+        <p class="tech-role">Dataset storage and model checkpoint saving</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-emoji">🎨</span>
+        <p class="tech-name">HTML / CSS / JS</p>
+        <p class="tech-role">Frontend UI with drag-and-drop upload</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Limitations -->
+<div class="container">
+  <p class="section-eyebrow">Important Notes</p>
+  <h2 class="section-title">Limitations & <em>Disclaimer</em></h2>
+  <p class="section-sub">This is a research and educational project. Please be aware of the following before interpreting any results.</p>
+
+  <ul class="limit-list">
+    <li>This tool is for <strong>educational and research purposes only</strong>. It is not a certified medical device and should never be used as a substitute for professional medical diagnosis.</li>
+    <li>The model was trained on a limited dataset of 3000 images. Performance may vary significantly on images from different ultrasound machines, imaging protocols, or patient demographics.</li>
+    <li>Grayscale ultrasound images are inherently noisy and operator-dependent. The model does not account for image quality variation.</li>
+    <li>The model has no knowledge of patient history, clinical context, or other diagnostic information that a physician would consider.</li>
+    <li>Always consult a <strong>qualified medical professional</strong> for any health concerns or before making any medical decisions.</li>
+  </ul>
+</div>
+
+<!-- CTA -->
+<div class="cta-banner">
+  <h2>Try <em>OncoScan</em> Now</h2>
+  <p>Upload a breast ultrasound image and get an AI prediction in seconds.</p>
+  <a href="/detect" class="btn-primary" style="font-size:1rem; padding: 1rem 2.5rem;">Start Detection →</a>
+</div>
+
+<p class="disclaimer">
+  ⚠️ This tool is for educational and research purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified medical professional.
+</p>
+
+<footer>
+  <p class="footer-copy">© 2025 OncoScan · AI Breast Cancer Detection</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/detect">Detect</a>
+    <a href="/about">About</a>
+  </div>
+</footer>
+
+</body>
+</html>
