@@ -1,24 +1,17 @@
 import os
-import gc
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-tf_config = os.environ.get('TF_FORCE_GPU_ALLOW_GROWTH', 'true')
-
 from flask import Flask, request, jsonify, render_template
 import numpy as np
 import cv2
-import gdown
+import os          # ← ADDED
+import gdown       # ← ADDED
 import tensorflow as tf
-
-tf.config.set_visible_devices([], 'GPU')
-
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import InputLayer, Conv2D, Flatten, Dense, Dropout
 app = Flask(__name__)
 IMG_SIZE = 300
-
 def build_vgg16_model():
-    from tensorflow.keras.applications import VGG16
-    from tensorflow.keras.models import Sequential
-    from tensorflow.keras.layers import InputLayer, Conv2D, Flatten, Dense, Dropout
-
     base_model = VGG16(include_top=False, input_shape=(IMG_SIZE, IMG_SIZE, 3))
     base_model.trainable = False
     model = Sequential([
@@ -34,78 +27,61 @@ def build_vgg16_model():
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
     return model
-
+# ── ADDED: Download weights from Google Drive if not present ──
 weights_path = 'final_vgg16_weights.weights.h5'
-
 if not os.path.exists(weights_path):
     print("Downloading model weights from Google Drive...")
     gdown.download(
-        'https://drive.google.com/uc?id=1OF73Xh4DwbXG090RGIFZl7eGabZqb8bO',
+        'https://drive.google.com/uc?id=1OF73Xh4DwbXG090RGIFZl7eGabZqb8bO',  # ← REPLACE THIS
         weights_path,
         quiet=False
     )
-
+# ─────────────────────────────────────────────────────────────
 model = build_vgg16_model()
 model.load_weights(weights_path)
 print("Model loaded successfully!")
-
 CATEGORIES = ["benign", "malignant", "normal"]
-
 DESCRIPTIONS = {
     "benign": "A non-cancerous tumor was detected. Benign tumors do not invade nearby tissue or spread. Please consult your doctor for further evaluation.",
     "malignant": "A potentially cancerous tumor was detected. Malignant tumors can invade nearby tissue. Immediate medical consultation is strongly recommended.",
     "normal": "No tumor was detected. The tissue appears normal. Regular check-ups are still recommended."
 }
-
 @app.route("/")
 def home():
     return render_template("home.html")
-
 @app.route("/about")
 def about():
     return render_template("about.html")
-
 @app.route("/detect")
 def detect():
     return render_template("index.html")
-
 @app.route("/predict", methods=["POST"])
 def predict():
     if "file" not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
-
     file = request.files["file"]
     if file.filename == "":
         return jsonify({"error": "No file selected"}), 400
-
     file_bytes = np.frombuffer(file.read(), np.uint8)
     img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
-
     if img is None:
         return jsonify({"error": "Invalid image file"}), 400
-
     img_resized = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
     img_input = img_resized / 255.0
     img_input = np.expand_dims(img_input, axis=-1)
     img_input = np.expand_dims(img_input, axis=0)
-
-    prediction = model.predict(img_input, verbose=0)
-    gc.collect()
-
+    prediction = model.predict(img_input)
     predicted_class = CATEGORIES[np.argmax(prediction)]
     confidence = float(np.max(prediction)) * 100
-
     probabilities = {
         cat: round(float(prob) * 100, 2)
         for cat, prob in zip(CATEGORIES, prediction[0])
     }
-
     return jsonify({
         "predicted_class": predicted_class,
         "confidence": round(confidence, 2),
         "probabilities": probabilities,
         "description": DESCRIPTIONS[predicted_class]
     })
-
 if __name__ == "__main__":
     app.run(debug=True)
