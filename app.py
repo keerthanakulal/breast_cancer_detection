@@ -1,20 +1,24 @@
 import os
+import gc
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+tf_config = os.environ.get('TF_FORCE_GPU_ALLOW_GROWTH', 'true')
+
 from flask import Flask, request, jsonify, render_template
 import numpy as np
 import cv2
-import os          # ← ADDED
-import gdown       # ← ADDED
+import gdown
 import tensorflow as tf
-from tensorflow.keras.applications import VGG16
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import InputLayer, Conv2D, Flatten, Dense, Dropout
+
+tf.config.set_visible_devices([], 'GPU')
 
 app = Flask(__name__)
-
 IMG_SIZE = 300
 
 def build_vgg16_model():
+    from tensorflow.keras.applications import VGG16
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import InputLayer, Conv2D, Flatten, Dense, Dropout
+
     base_model = VGG16(include_top=False, input_shape=(IMG_SIZE, IMG_SIZE, 3))
     base_model.trainable = False
     model = Sequential([
@@ -31,17 +35,15 @@ def build_vgg16_model():
                   metrics=['accuracy'])
     return model
 
-# ── ADDED: Download weights from Google Drive if not present ──
 weights_path = 'final_vgg16_weights.weights.h5'
 
 if not os.path.exists(weights_path):
     print("Downloading model weights from Google Drive...")
     gdown.download(
-        'https://drive.google.com/uc?id=1OF73Xh4DwbXG090RGIFZl7eGabZqb8bO',  # ← REPLACE THIS
+        'https://drive.google.com/uc?id=1OF73Xh4DwbXG090RGIFZl7eGabZqb8bO',
         weights_path,
         quiet=False
     )
-# ─────────────────────────────────────────────────────────────
 
 model = build_vgg16_model()
 model.load_weights(weights_path)
@@ -87,7 +89,9 @@ def predict():
     img_input = np.expand_dims(img_input, axis=-1)
     img_input = np.expand_dims(img_input, axis=0)
 
-    prediction = model.predict(img_input)
+    prediction = model.predict(img_input, verbose=0)
+    gc.collect()
+
     predicted_class = CATEGORIES[np.argmax(prediction)]
     confidence = float(np.max(prediction)) * 100
 
