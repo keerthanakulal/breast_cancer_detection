@@ -35,7 +35,7 @@ weights_path = 'final_vgg16_weights.weights.h5'
 if not os.path.exists(weights_path):
     print("Downloading model weights from Google Drive...")
     gdown.download(
-        https://drive.google.com/file/d/1OF73Xh4DwbXG090RGIFZl7eGabZqb8bO/view?usp=drive_link,  # ← REPLACE THIS
+        'https://drive.google.com/uc?id=1OF73Xh4DwbXG090RGIFZl7eGabZqb8bO',  # ← REPLACE THIS
         weights_path,
         quiet=False
     )
