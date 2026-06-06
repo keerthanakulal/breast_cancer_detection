@@ -1,3 +1,5 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from flask import Flask, request, jsonify, render_template
 import numpy as np
 import cv2
