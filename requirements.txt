@@ -1,7 +1,7 @@
 flask==2.3.2
 numpy
 opencv-python-headless
-tensorflow
+tensorflow-cpu
 gunicorn
 werkzeug==2.3.8
 h5py
