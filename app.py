@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 import numpy as np
 import cv2
+import os          # ← ADDED
+import gdown       # ← ADDED
 import tensorflow as tf
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.models import Sequential
@@ -27,8 +29,20 @@ def build_vgg16_model():
                   metrics=['accuracy'])
     return model
 
+# ── ADDED: Download weights from Google Drive if not present ──
+weights_path = 'final_vgg16_weights.weights.h5'
+
+if not os.path.exists(weights_path):
+    print("Downloading model weights from Google Drive...")
+    gdown.download(
+        https://drive.google.com/file/d/1OF73Xh4DwbXG090RGIFZl7eGabZqb8bO/view?usp=drive_link,  # ← REPLACE THIS
+        weights_path,
+        quiet=False
+    )
+# ─────────────────────────────────────────────────────────────
+
 model = build_vgg16_model()
-model.load_weights('final_vgg16_weights.weights.h5')
+model.load_weights(weights_path)
 print("Model loaded successfully!")
 
 CATEGORIES = ["benign", "malignant", "normal"]
